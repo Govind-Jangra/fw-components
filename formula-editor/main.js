@@ -338,7 +338,7 @@ var FormulaBuilder = (_FormulaBuilder = /*#__PURE__*/function (_LitElement) {
       var _this2 = this,
         _this$formula$error,
         _this$formula$error2;
-      return Object(lit__WEBPACK_IMPORTED_MODULE_0__["html"])(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n      ", "\n\n      <div>\n        <label for=\"metric-name-input\">Metric Name</label>\n        <input\n          id=\"metric-name-input\"\n          .value=", "\n          @input=", "\n        />\n      </div>\n      <label>Formula</label>\n      <formula-editor\n          id=\"formula-editor\"\n        class=\"fe\"\n        minSuggestionLen=\"0\"\n        @fw-formula-content-changed=", "\n        .variables=", "\n        .content=", "\n        .errorString=", "\n      >\n      </formula-editor>\n      <div id=\"wysiwyg-err\" class=\"", "\">\n        ", "\n      </div>\n      <button class=\"primary-text-button\" @click=", ">\n        Calculate\n      </button>\n      <button class=\"primary-text-button\" @click=", ">\n        Format\n      </button>\n    "])), _styles_src_button_styles_js__WEBPACK_IMPORTED_MODULE_3__["TextButtonStyles"], this.formula.name, function (e) {
+      return Object(lit__WEBPACK_IMPORTED_MODULE_0__["html"])(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n      ", "\n\n      <div>\n        <label for=\"metric-name-input\">Metric Name</label>\n        <input\n          id=\"metric-name-input\"\n          .value=", "\n          @input=", "\n        />\n      </div>\n      <label>Formula</label>\n      <formula-editor\n        class=\"fe\"\n        minSuggestionLen=\"0\"\n        @fw-formula-content-changed=", "\n        .variables=", "\n        .content=", "\n        .errorString=", "\n      >\n      </formula-editor>\n      <div id=\"wysiwyg-err\" class=\"", "\">\n        ", "\n      </div>\n      <button class=\"primary-text-button\" @click=", ">\n        Calculate\n      </button>\n      <button class=\"primary-text-button\" @click=", ">\n        Format\n      </button>\n    "])), _styles_src_button_styles_js__WEBPACK_IMPORTED_MODULE_3__["TextButtonStyles"], this.formula.name, function (e) {
         _this2.handleChange();
       }, function (e) {
         _this2.formula.formulaString = e.detail.formulaString;
@@ -377,7 +377,7 @@ __decorate([Object(lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__["property"])({
   }
 })], FormulaBuilder.prototype, "formula", void 0);
 __decorate([Object(lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__["query"])("#metric-name-input")], FormulaBuilder.prototype, "nameInput", void 0);
-__decorate([Object(lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__["query"])("#formula-editor")], FormulaBuilder.prototype, "formulaEditor", void 0);
+__decorate([Object(lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__["query"])("formula-editor")], FormulaBuilder.prototype, "formulaEditor", void 0);
 FormulaBuilder = __decorate([Object(lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__["customElement"])("formula-builder")], FormulaBuilder);
 
 /***/ }),
@@ -1507,7 +1507,7 @@ var FWFormulaEditorShowcase = _decorate(null, function (_initialize, _LitElement
         var _event$detail = event.detail,
           name = _event$detail.name,
           rawFormula = _event$detail.rawFormula,
-          error = _event$detail.error,
+          _ = _event$detail.error,
           precision = _event$detail.precision;
         this.currentFormula = new Formula(name, rawFormula, precision);
       }
