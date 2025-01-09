@@ -1124,7 +1124,7 @@ var Parser = /*#__PURE__*/function () {
               // Big.js doesn't support exponentiating a Big to a Big, which
               // is obvious due to performance overheads. Use this case with care.
               case "^":
-                calcStack.push(big_js__WEBPACK_IMPORTED_MODULE_0___default()(numA).pow(big_js__WEBPACK_IMPORTED_MODULE_0___default()(numB).toNumber()));
+                calcStack.push(big_js__WEBPACK_IMPORTED_MODULE_0___default()(numA).pow(parseFloat(big_js__WEBPACK_IMPORTED_MODULE_0___default()(numB).toString())));
             }
           } catch (error) {
             calculationResult.errorString = error;
@@ -1504,10 +1504,11 @@ var FWFormulaEditorShowcase = _decorate(null, function (_initialize, _LitElement
       kind: "method",
       key: "handleFormulaChange",
       value: function handleFormulaChange(event) {
+        // eslint-disable-next-line no-unused-vars
         var _event$detail = event.detail,
           name = _event$detail.name,
           rawFormula = _event$detail.rawFormula,
-          _ = _event$detail.error,
+          error = _event$detail.error,
           precision = _event$detail.precision;
         this.currentFormula = new Formula(name, rawFormula, precision);
       }
