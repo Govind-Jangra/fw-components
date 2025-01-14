@@ -476,12 +476,7 @@ var FormulaEditor = /*#__PURE__*/function (_LitElement) {
     value: function navigateRecommendations(direction) {
       if (!this._recommendations) return;
       var currentIndex = this._recommendations.indexOf(this._selectedRecommendation);
-      var newIndex = currentIndex;
-      if (direction === "ArrowDown") {
-        newIndex = currentIndex === this._recommendations.length - 1 ? 0 : currentIndex + 1;
-      } else if (direction === "ArrowUp") {
-        newIndex = currentIndex === 0 ? this._recommendations.length - 1 : currentIndex - 1;
-      }
+      var newIndex = direction === "ArrowDown" ? (currentIndex + 1) % this._recommendations.length : direction === "ArrowUp" ? (currentIndex - 1 + this._recommendations.length) % this._recommendations.length : currentIndex;
       this._selectedRecommendation = this._recommendations[newIndex];
     }
   }, {
@@ -1415,7 +1410,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lit */ "./node_modules/lit/index.js");
 /* harmony import */ var lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lit/decorators.js */ "./node_modules/lit/decorators.js");
 /* harmony import */ var _fw_components_formula_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fw-components/formula-editor */ "../../packages/formula-editor/dist/formula-editor/src/formula-builder.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 var _templateObject, _templateObject2, _templateObject3;
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
@@ -1441,22 +1435,36 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var Formula = /*#__PURE__*/_createClass(function Formula(name, formulaString) {
-  var precision = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
-  _classCallCheck(this, Formula);
-  this.name = name;
-  this.formulaString = formulaString;
-  this.precision = precision;
-  this.error = null;
-});
+var Formula = /*#__PURE__*/function () {
+  function Formula(name, formulaString) {
+    var precision = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -1;
+    _classCallCheck(this, Formula);
+    this.name = name;
+    this.formulaString = formulaString;
+    this.precision = precision;
+    this.error = null;
+  }
+  _createClass(Formula, [{
+    key: "formulaString",
+    get: function get() {
+      return this._formulaString;
+    },
+    set: function set(value) {
+      this._formulaString = value;
+      this.error = null;
+    }
+  }]);
+  return Formula;
+}();
 var FWFormulaEditorShowcase = _decorate(null, function (_initialize, _LitElement) {
   var FWFormulaEditorShowcase = /*#__PURE__*/function (_LitElement2) {
     _inherits(FWFormulaEditorShowcase, _LitElement2);
@@ -1504,11 +1512,9 @@ var FWFormulaEditorShowcase = _decorate(null, function (_initialize, _LitElement
       kind: "method",
       key: "handleFormulaChange",
       value: function handleFormulaChange(event) {
-        // eslint-disable-next-line no-unused-vars
         var _event$detail = event.detail,
           name = _event$detail.name,
           rawFormula = _event$detail.rawFormula,
-          error = _event$detail.error,
           precision = _event$detail.precision;
         this.currentFormula = new Formula(name, rawFormula, precision);
       }
@@ -1516,7 +1522,7 @@ var FWFormulaEditorShowcase = _decorate(null, function (_initialize, _LitElement
       kind: "method",
       key: "render",
       value: function render() {
-        return Object(lit__WEBPACK_IMPORTED_MODULE_0__["html"])(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      <div class=\"formula-editor-showcase\">\n        <div class=\"variables\">\n\n          <!-- Current Variables -->\n          <div class=\"variable-list\">\n            <h4>Current Variables</h4>\n            ", "\n          </div>\n        </div>\n\n        <div class=\"formula-builder-container\">\n          <formula-builder\n            id=\"formula-builder-showcase\"\n            .variables=", "\n            .formula=", "\n            @fw-formula-changed=", "\n          ></formula-builder>\n        </div>\n      </div>\n    "])), Array.from(this.variables.entries()).map(function (_ref) {
+        return Object(lit__WEBPACK_IMPORTED_MODULE_0__["html"])(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      <div class=\"formula-editor-showcase\">\n        <div class=\"variables\">\n          <!-- Current Variables -->\n          <div class=\"variable-list\">\n            <h4>Current Variables</h4>\n            ", "\n          </div>\n        </div>\n\n        <div class=\"formula-builder-container\">\n          <formula-builder\n            id=\"formula-builder-showcase\"\n            .variables=", "\n            .formula=", "\n            @fw-formula-changed=", "\n          ></formula-builder>\n        </div>\n      </div>\n    "])), Array.from(this.variables.entries()).map(function (_ref) {
           var _ref2 = _slicedToArray(_ref, 2),
             key = _ref2[0],
             value = _ref2[1];

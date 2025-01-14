@@ -14122,7 +14122,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "3.5.1";
+const version = "3.5.2";
 const builtCSS = window.ShadyCSS && window.ShadyCSS["cssBuild"];
 const ElementMixin = (0,_utils_mixin_js__WEBPACK_IMPORTED_MODULE_2__.dedupingMixin)((base) => {
   const polymerElementBase = (0,_properties_mixin_js__WEBPACK_IMPORTED_MODULE_7__.PropertiesMixin)((0,_property_effects_js__WEBPACK_IMPORTED_MODULE_6__.PropertyEffects)(base));
@@ -19401,15 +19401,20 @@ let FlattenedNodesObserver = class {
       node;
       return wrapped.assignedNodes({ flatten: true });
     } else {
-      return Array.from(wrapped.childNodes).map((node2) => {
+      const results = [];
+      for (let i = 0; i < wrapped.childNodes.length; i++) {
+        const node2 = wrapped.childNodes[i];
         if (isSlot(node2)) {
-          node2 = /** @type {!HTMLSlotElement} */
-          node2;
-          return (0,_wrap_js__WEBPACK_IMPORTED_MODULE_3__.wrap)(node2).assignedNodes({ flatten: true });
+          const slotNode = (
+            /** @type {!HTMLSlotElement} */
+            node2
+          );
+          results.push(...(0,_wrap_js__WEBPACK_IMPORTED_MODULE_3__.wrap)(slotNode).assignedNodes({ flatten: true }));
         } else {
-          return [node2];
+          results.push(node2);
         }
-      }).reduce((a, b) => a.concat(b), []);
+      }
+      return results;
     }
   }
   /**
