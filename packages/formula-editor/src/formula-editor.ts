@@ -37,6 +37,9 @@ export class FormulaEditor extends LitElement {
   @state()
   _calculatedResult: number | undefined = undefined;
 
+  @state()
+  variableTokens: Set<string> = new Set();
+
   /**
    * If `parseInput` is called to add a recommendation, say by clicking,
    * browser removes focus from the input box. In that case, we have no way
@@ -145,6 +148,7 @@ export class FormulaEditor extends LitElement {
     recommendation: string | null = null,
     manageCursor: boolean = true
   ) {
+    
     let editor = this.shadowRoot?.getElementById("wysiwyg-editor");
     if (!editor) return;
 
@@ -157,6 +161,7 @@ export class FormulaEditor extends LitElement {
         ? this.currentCursorPosition
         : Cursor.getCaretPosition(this.shadowRoot!, editor);
 
+
     const parseOutput = this._parser.parseInput(
       this.content,
       this.currentCursorPosition,
@@ -166,6 +171,7 @@ export class FormulaEditor extends LitElement {
     this._recommendations = parseOutput.recommendations;
     this._formattedContent = parseOutput.formattedContent;
     this.errorString = parseOutput.errorString;
+    this.variableTokens = parseOutput.variableTokens;
 
     /**
      * Don't modify the text stream manually if the text is being composed,
@@ -200,6 +206,7 @@ export class FormulaEditor extends LitElement {
         detail: {
           formulaString: this.content,
           error: this.errorString,
+          variableTokens:this.variableTokens
         },
         bubbles: true,
       })

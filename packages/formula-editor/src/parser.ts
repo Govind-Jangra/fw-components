@@ -8,6 +8,7 @@ export interface ParseResult {
   formattedString: string | null;
   newCursorPosition: number;
   errorString: string | null;
+  variableTokens: Set<string>;
 }
 
 export interface CalculateResult {
@@ -58,6 +59,8 @@ export class Parser {
     // Previous 'token' (not a space or a new line) that we just encountered.
     let previousToken = "";
 
+    const variableTokens : Set<string> = new Set();
+
     // The object that we return as the output of the parsing result.
     let parseOutput: ParseResult = {
       recommendations: null,
@@ -65,9 +68,11 @@ export class Parser {
       formattedString: null,
       newCursorPosition: prevCurPos ?? -1,
       errorString: null,
+      variableTokens: null
     };
 
-    console.log(tokens);
+
+    if(recommendation!==null && this.variables.has(recommendation)) variableTokens.add(recommendation);
 
     tokens.forEach((token) => {
       // It is a number is either it's in the defined variables, or
@@ -76,6 +81,8 @@ export class Parser {
         isOperator = this.mathematicalOperators.has(token),
         isSpace = token.trim() == "",
         isBracket = token == "(" || token == ")";
+
+      if(this.variables.has(token)) variableTokens.add(token)
 
       // We don't really want anything for the spaces, other than simply
       // adding them back to the view.
@@ -120,7 +127,6 @@ export class Parser {
         // Fetch recommendations nonetheless.
         parseOutput.recommendations =
           this._recommender.getRecommendation(token);
-        console.log(parseOutput.recommendations);
       }
 
       let tokenClassName = "";
@@ -235,7 +241,7 @@ export class Parser {
 
     parseOutput.formattedContent = doc.querySelector("body")!;
     parseOutput.formattedString = formattedString;
-
+    parseOutput.variableTokens = variableTokens;
     return parseOutput;
   }
 
